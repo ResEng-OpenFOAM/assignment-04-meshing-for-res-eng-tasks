@@ -21,7 +21,8 @@ In this section, we focus on two main ideas:
 
 The following figure describes a 1D simplification for the problem to the radial direction
 (which we denote as `x`, because radial flow usually happens in a cylindrical setup):
-![Mesh for radial flow to well](images/mesh-radial-flow.png)
+
+![Mesh for radial flow to well](images/nearWellMeshSketch.png)
 
 > The origin of all calculations is at the center of the well cell.
 
@@ -32,7 +33,7 @@ You can think of a well as:
 But it's irrelevant for our case because we won't go beyond the meshing step in this assignment.
 And of course, we assume a single-phase, steady-state and **incompressible flow** through the domain.
 
-We are particularly interested in the pressure field (p) defined at cell centers (c).
+We are particularly interested in the pressure field `p` defined at cell centers `c`.
 We also define the pressure difference through a cell to be the difference of pressure values at
 its eastern face (fe) and its western one (fw).
 
@@ -57,7 +58,7 @@ Thus, we'll just write (`a` is some constant):
 
 ![](https://i.upmath.me/png/Q%20%3D%20a%20x%20%5Cfrac%7B%5Cpartial%20p%7D%7B%5Cpartial%20x%7D)
 
-1. Remember that the flow incompressible (The volumetric flow rate Q is constant through the domain).
+1. Remember that the flow is incompressible (The volumetric flow rate Q is constant through the domain).
 By integrating the previous equation between (fw) and (fe), find the pressure difference over a cell
 as a function of positions of (fe) and (fw), Q, and `a`.
 
@@ -69,7 +70,7 @@ the expression of this lambda value.
 
 > Of course, cell centers then must take midway positions (so they can be centroids) between cell faces;
 > this is a requirement by the Finite Volume Method for the approximations to be **second-order accurate**.
-> It's particularly attractive to set ![](https://i.upmath.me/png/x_%7Bi%2B1%7D%20%3D%20%5Clambda%20x_%7Bi%7D)
+> It's particularly attractive to set ![](https://i.upmath.me/png/c_%7Bi%2B1%7D%20%3D%20%5Clambda%20c_%7Bi%7D)
 > for convenience instead of working on faces but that would break the second-order accuracy.
 
 > Note also that we haven't fully defined the geometric sequence the face positions follow.
@@ -101,6 +102,31 @@ one in the block..
 Now that we have the grading factor ready, we can go ahead and 
 design an appropriate `blockMeshDict`:
 
-2. 
+2. You can use the case we built in the previous module as a 
+   dummy case to generate the mesh on:
+
+   ```bash
+   (rem) > git clone https://github.com/FOAM-School/res-eng-openfoam-intro nearWellMesh
+   (rem) > cd nearWellMesh
+   ```
+
+The goal is to mesh a 1D domain of total length 1 km to 20 cells
+where each cell will maintain a pressure difference of 20 psia
+(that's around 1.38e5 Pa) in the steady state of the flow.
+
+3. Assuming that `|a| = 0.0896` and that the flow is going out 
+   of the well into the porous media, find the corresponding 
+   value of `lambda`.
+
+4. Make it so `blockMeshDict` reflects these settings (for the 
+   grading factor, use `simpleGrading` in x-direction).
+
+> You may want to increase cell size in secondary directions
+> to at least 10 for visualization purposes. Visualizing a
+> 1000 meters long domain with a width of 0.1 can be tricky.
+
+5. Run `checkMesh` as usual and pay close attention to the
+   the reported aspect ratio. Do secondary directions get involved
+   in the calculation of this metric even though the mesh is 1D?
 
 ## Advanced-level skills
