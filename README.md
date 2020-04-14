@@ -112,7 +112,8 @@ design an appropriate `blockMeshDict`:
 
 The goal is to mesh a 1D domain of total length 1 km to 20 cells
 where each cell will maintain a pressure difference of 20 psia
-(that's around 1.38e5 Pa) in the steady state of the flow.
+(that's around 1.38e5 Pa) in the steady state of the flow where
+the volumetric flowrate is expected to be `Q = 1e-6 m3/s`.
 
 3. Assuming that `|a| = 0.0896` and that the flow is going out 
    of the well into the porous media, find the corresponding 
@@ -126,7 +127,7 @@ where each cell will maintain a pressure difference of 20 psia
 > 1000 meters long domain with a width of 0.1 can be tricky.
 
 5. Run `checkMesh` as usual and pay close attention to the
-   the reported aspect ratio. Do secondary directions get involved
+   reported aspect ratio (around 9.7). Do secondary directions get involved
    in the calculation of this metric even though the mesh is 1D?
 
 ## Advanced-level skills
