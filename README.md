@@ -8,6 +8,40 @@
 
 ## Basic-level skills
 
+OpenFOAM mesh is designed specifically to **second-order** 
+Finite Volume Simulations. In this section, we investigate some
+of the pros-n-cons of such mesh design (Mosty focusing on Reservoir
+Engineering Applications).
+
+In the lectures, we've mentioned these specific mesh 
+characteristics of OpenFOAM mesh generated with `blockMesh`:
+
+- If two blocks are to share a (block) face, they at least
+  share one edge.
+- Two blocks can only share the whole block edge.
+
+1. If you are to mesh an **L**-shaped domain, how many blocks
+   would you need? (More than 2).
+
+2. Would it be possible to convert traditional Corner-point grids
+   to OpenFOAM using `blockMesh`'s hex blocks? (Without any
+   aggressive actions on the mesh: no 
+   adding/splitting/removing/squashing ... etc of cells):
+
+> Note that, in a corner grid, block vertices are not required to
+> be aligned with adjacent block vertices!
+
+![Corner Point Grid](https://www.ocean.slb.com/PetrelBasicTraining_2009/Content/Pics/introStructural.jpg)
+(Image from [Petrel Basic Training 2009, slb.com](https://www.ocean.slb.com/PetrelBasicTraining_2009/Content/92.htm))
+
+The full sharing of a face is also a constraint at the cell-level:
+You can't have two adjacent cells share only a portion of a face.
+And I think It's abvious why: The previous module briefly reviewed 
+how matrix coeffcients are caculated for each cell based on its 
+faces; Always remember that the emphasis is put on faces instead 
+of cells in OpenFOAM calculations.
+
+
 ## Intermediate-level skills
 
 This section will walk you through a popular meshing practice for problems involving
@@ -17,7 +51,7 @@ a single phase case).
 
 In this section, we focus on two main ideas:
 - Choosing optimal mesh cells to correctly solve the flow near the well.
-- Constructing an Finite Volume Mesh along the way
+- Constructing a Finite-Volume Mesh along the way.
 
 The following figure describes a 1D simplification for the problem to the radial direction
 (which we denote as `x`, because radial flow usually happens in a cylindrical setup):
@@ -131,3 +165,5 @@ the volumetric flowrate is expected to be `Q = 1e-6 m3/s`.
    in the calculation of this metric even though the mesh is 1D?
 
 ## Advanced-level skills
+
+You'll get advanced-level questions only when completing the hole module.
