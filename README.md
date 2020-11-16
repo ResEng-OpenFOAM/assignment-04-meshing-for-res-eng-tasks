@@ -1,4 +1,4 @@
-# Assignment for "Meshing for Reservoir Engineering tasks"
+# Assignment for "3-01 Meshing for Reservoir Engineering tasks" unit
 
 ## Goals
 
@@ -8,7 +8,7 @@
 
 ## Basic-level skills
 
-OpenFOAM mesh is designed specifically to **second-order** 
+OpenFOAM mesh is designed specifically for **second-order** 
 Finite Volume Simulations. In this section, we investigate some
 of the pros-n-cons of such mesh design (Mosty focusing on Reservoir
 Engineering Applications).
@@ -21,7 +21,7 @@ characteristics of OpenFOAM mesh generated with `blockMesh`:
 - Two blocks can only share the whole block edge.
 
 1. If you are to mesh an **L**-shaped domain, how many blocks
-   would you need? (More than 2).
+   would you need? (More than 2?).
 
 2. Would it be possible to convert traditional Corner-point grids
    to OpenFOAM using `blockMesh`'s hex blocks? (Without any
@@ -58,11 +58,11 @@ The following figure describes a 1D simplification for the problem to the radial
 
 ![Mesh for radial flow to well](images/nearWellMeshSketch.png)
 
-> The origin of all calculations is at the center of the well cell.
+> The reference point of all calculations is at the center of the well cell.
 
 You can think of a well as:
 - A **Cell Source**, adding extraction/injection flowrate Q to governing equations. 
-- Or a boundary condition acting on the boundary faces of cell 0.
+- Or a boundary condition for the velocity field acting on the boundary faces of cell 0.
 
 But it's irrelevant for our case because we won't go beyond the meshing step in this assignment.
 And of course, we assume a single-phase, steady-state and **incompressible flow** through the domain.
@@ -78,7 +78,7 @@ its eastern face (fe) and its western one (fw).
 
 We want to find optimal **cell sizes** that keep cell pressure difference constant throughout the domain.
 
-If the flow is assumed to adhere to Darcy's Law:
+If the we assume the flow adheres to Darcy's Law:
 
 ![](https://latex.codecogs.com/gif.latex?Q&space;=&space;a&space;S&space;\frac{\partial&space;p}{\partial&space;x})
 
@@ -92,7 +92,7 @@ Thus, we'll just write (`a` is some constant):
 
 ![](https://i.upmath.me/png/Q%20%3D%20a%20x%20%5Cfrac%7B%5Cpartial%20p%7D%7B%5Cpartial%20x%7D)
 
-1. Remember that the flow is incompressible (The volumetric flow rate Q is constant through the domain).
+1. Considering that the flow is incompressible (The volumetric flow rate Q is constant through the domain).
 By integrating the previous equation between (fw) and (fe), find the pressure difference over a cell
 as a function of positions of (fe) and (fw), Q, and `a`.
 
@@ -111,14 +111,14 @@ the expression of this lambda value.
 
 ### OpenFOAM Implementation
 
-Now let's use `blockMesh` to translate the calculations we did the previous section to a valid OpenFOAM mesh.
+Now let's use `blockMesh` to translate the calculations we did in the previous section to a valid OpenFOAM mesh.
 
 We'll put all mesh cells in a single mesh block and assume the flow is going **out** of the well
 and the well effects perish near a radius Re away (That's the mesh boundary: 
 boundary face of cell 8 in the figure)
 
-Using `blockMesh`'s `simpleGrading`, we can grade the mesh b only known the ratio between the largest
-cell and the smallest one.
+Using `blockMesh`'s `simpleGrading`, we can grade the mesh using only the ratio between the largest
+cell size and the smallest one.
 
 In our case, we must first find the cell size expression. For each cell: 
 
@@ -128,7 +128,7 @@ and then we relate everything to the position of the first cell face:
 
 ![](https://i.upmath.me/png/f_e%20-%20f_w%5Cbiggr%5Crvert_%7Bcell_i%7D%20%3D%20f_0%20b%5Ei%20(%5Clambda%20-%201))
 
-`f0` being the position of the boundary face of cell 0 in the figure.
+`f0` being the position of the boundary face of cell 0 in the figure and `b` is the common retio of the geometric sequence.
 
 1. Applying the same expression on cell `N-1`, you can derive the ratio between the largest cell size and the smallest
 one in the block..
@@ -140,13 +140,13 @@ design an appropriate `blockMeshDict`:
    dummy case to generate the mesh on:
 
    ```bash
-   (rem) > git clone https://github.com/FOAM-School/res-eng-openfoam-intro nearWellMesh
-   (rem) > cd nearWellMesh
+   (of@con:run) git clone https://github.com/ResEng-OpenFOAM/res-eng-openfoam-introduction  intro
+   (of@con:run) > cd nearWellMesh
    ```
 
-The goal is to mesh a 1D domain of total length 1 km to 20 cells
+The goal is to mesh a 1D domain of total length of 1 km to 20 cells
 where each cell will maintain a pressure difference of 20 psia
-(that's around 1.38e5 Pa) in the steady state of the flow where
+(that's around 1.38e5 Pa) in the steady-state flow where
 the volumetric flowrate is expected to be `Q = 1e-6 m3/s`.
 
 3. Assuming that `|a| = 0.0896` and that the flow is going out 
@@ -158,11 +158,12 @@ the volumetric flowrate is expected to be `Q = 1e-6 m3/s`.
 
 > You may want to increase cell size in secondary directions
 > to at least 10 for visualization purposes. Visualizing a
-> 1000 meters long domain with a width of 0.1 can be tricky.
+> 1000 meters long domain with a width of 0.1m can be tricky.
 
 5. Run `checkMesh` as usual and pay close attention to the
-   reported aspect ratio (around 9.7). Do secondary directions get involved
-   in the calculation of this metric even though the mesh is 1D?
+   reported aspect ratio (should be around 9.7). Do secondary
+   directions get involved in the calculation of this metric even
+   though the solution is intended to be only in 1D?
 
 ## Advanced-level skills
 
