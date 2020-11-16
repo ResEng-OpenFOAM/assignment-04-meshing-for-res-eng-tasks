@@ -126,9 +126,9 @@ In our case, we must first find the cell size expression. For each cell:
 
 and then we relate everything to the position of the first cell face:
 
-![](https://i.upmath.me/png/f_e%20-%20f_w%5Cbiggr%5Crvert_%7Bcell_i%7D%20%3D%20f_0%20b%5Ei%20(%5Clambda%20-%201))
+![](https://i.upmath.me/png/f_e%20-%20f_w%5Cbiggr%5Crvert_%7Bcell_i%7D%20%3D%20f_0%20%5Clambda%5Ei%20(%5Clambda%20-%201))
 
-`f0` being the position of the boundary face of cell 0 in the figure and `b` is the common retio of the geometric sequence.
+`f0` being the position of the boundary face of cell 0 in the figure.
 
 1. Applying the same expression on cell `N-1`, you can derive the ratio between the largest cell size and the smallest
 one in the block..
